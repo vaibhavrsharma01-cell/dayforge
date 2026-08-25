@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DayForge — Forge Your Perfect Day</title>
+  <meta name="description" content="DayForge helps you build better routines, track your habits and turn daily consistency into meaningful progress.">
+  <meta name="keywords" content="habit tracker, daily routine, productivity app, habit tracking, streak tracker, personal development, DayForge">
+  <meta name="author" content="Vaibhav Sharma">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dayforgebyautomatex.netlify.app/">
+  <meta property="og:title" content="DayForge — Forge Your Perfect Day">
+  <meta property="og:description" content="Build better routines, track your habits, and turn consistency into progress.">
+  <meta property="og:image" content="https://dayforgebyautomatex.netlify.app/favicon.svg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://dayforgebyautomatex.netlify.app/">
+  <meta property="twitter:title" content="DayForge — Forge Your Perfect Day">
+  <meta property="twitter:description" content="Build better routines, track your habits, and turn consistency into progress.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/shared.css">
+
+  <style>
+    /* ── LANDING PAGE SPECIFIC STYLES ── */
+    
+    /* SECTION LAYOUTS */
+    .section-wrap {
+      position: relative;
+      z-index: 10;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 110px 32px;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 64px;
+    }
+
+    .section-eyebrow {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--text-heading);
+      letter-spacing: -0.5px;
+      margin-bottom: 18px;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .section-desc {
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    /* ── HERO SECTION ── */
+    .hero-section {
+      position: relative;
+      z-index: 10;
+      min-height: calc(100vh - 60px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 130px 24px 70px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 18px;
+      background: rgba(201, 168, 76, 0.07);
+      border: 1px solid rgba(201, 168, 76, 0.22);
+      border-radius: 99px;
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      margin-bottom: 32px;
+      animation: fadeUp 0.8s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero-date-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold);
+    }
+
+    .hero-title-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 8.5vw, 6.8rem);
+      font-weight: 300;
+      line-height: 1.02;
+      letter-spacing: -1.5px;
+      color: var(--text-heading);
+      margin-bottom: 12px;
+      animation: fadeUp 0.9s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero-title-main span.gold-italic {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-quote-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 3.4vw, 2.2rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.35;
+      color: var(--text);
+      max-width: 720px;
+      margin: 0 auto 20px;
+      animation: fadeUp 0.9s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero-quote-quote em {
+      font-style: normal;
+      color: var(--gold2);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.4);
+    }
+
+    .hero-subtext {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: var(--text-mid);
+      max-width: 600px;
+      margin: 0 auto 42px;
+      line-height: 1.65;
+      font-weight: 400;
+      animation: fadeUp 0.9s 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+      animation: fadeUp 0.9s 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero-trust-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      width: 100%;
+      max-width: 680px;
+      animation: fadeIn 1s 0.85s ease both;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.64rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .trust-item span.icon {
+      color: var(--gold);
+      font-size: 0.8rem;
+    }
+
+    /* ── PRODUCT PREVIEW SECTION ── */
+    .preview-section {
+      position: relative;
+      z-index: 10;
+      max-width: 1000px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+    }
+
+    .preview-mockup-frame {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+        0 30px 90px rgba(0, 0, 0, 0.8),
+        0 0 60px rgba(201, 168, 76, 0.08);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+      position: relative;
+    }
+
+    .preview-mockup-frame:hover {
+      transform: translateY(-6px);
+      border-color: rgba(201, 168, 76, 0.35);
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+        0 40px 110px rgba(0, 0, 0, 0.9),
+        0 0 80px rgba(201, 168, 76, 0.15);
+    }
+
+    .mockup-window-header {
+      background: var(--surface2);
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .mockup-window-dots {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .mockup-window-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .mockup-window-dots span:nth-child(1) { background: #f87171; opacity: 0.8; }
+    .mockup-window-dots span:nth-child(2) { background: #fbbf24; opacity: 0.8; }
+    .mockup-window-dots span:nth-child(3) { background: #4ade80; opacity: 0.8; }
+
+    .mockup-window-title {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .mockup-window-badge {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      background: var(--gold-dim);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      border-radius: 99px;
+      color: var(--gold2);
+    }
+
+    .mockup-body {
+      padding: 32px 36px 40px;
+      background: linear-gradient(180deg, var(--surface) 0%, rgba(17, 17, 22, 0.95) 100%);
+    }
+
+    .mockup-user-bar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .mockup-greeting-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--text-heading);
+      line-height: 1.1;
+    }
+
+    .mockup-greeting-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .mockup-date-sub {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      margin-top: 4px;
+    }
+
+    .mockup-streak-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      background: rgba(251, 191, 36, 0.08);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      border-radius: var(--radius);
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.08);
+    }
+
+    .mockup-streak-fire {
+      font-size: 1.4rem;
+      animation: flamePulse 2s infinite ease-in-out;
+    }
+
+    .mockup-streak-text {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 600;
+    }
+
+    .mockup-progress-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .mockup-progress-left {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .mockup-prog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .mockup-prog-lbl {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+    }
+
+    .mockup-prog-val {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .mockup-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .mockup-fill {
+      width: 80%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--green) 100%);
+      border-radius: 99px;
+      box-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+    }
+
+    .mockup-score-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-left: 20px;
+      border-left: 1px solid var(--border);
+    }
+
+    .mockup-score-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .mockup-score-lbl {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .mockup-tasks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .mockup-task-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 18px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .mockup-task-item.done {
+      background: rgba(74, 222, 128, 0.03);
+      border-color: rgba(74, 222, 128, 0.18);
+    }
+
+    .mockup-task-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .mockup-task-check.checked {
+      background: var(--green);
+      color: #0a0a0c;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+    }
+
+    .mockup-task-check.empty {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .mockup-task-emoji {
+      font-size: 1.1rem;
+    }
+
+    .mockup-task-name {
+      font-size: 0.88rem;
+      flex: 1;
+      color: var(--text);
+    }
+
+    .mockup-task-item.done .mockup-task-name {
+      color: var(--text-mid);
+      text-decoration: line-through;
+    }
+
+    .mockup-task-time {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── INTERACTIVE DEMO SANDBOX ── */
+    .demo-sandbox-card {
+      background: var(--surface);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(201, 168, 76, 0.06);
+      max-width: 760px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .demo-sandbox-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .demo-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .demo-badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      background: rgba(74, 222, 128, 0.1);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      border-radius: 99px;
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    .demo-badge-live span.pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulseGreen 1.6s infinite ease-in-out;
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.5; }
+    }
+
+    .demo-instruction {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--text-mid);
+    }
+
+    .demo-tasks-interactive {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .demo-task-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 18px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .demo-task-row:hover {
+      border-color: var(--border-gold);
+      background: rgba(255, 255, 255, 0.03);
+      transform: translateX(4px);
+    }
+
+    .demo-task-row.checked {
+      background: rgba(74, 222, 128, 0.04);
+      border-color: rgba(74, 222, 128, 0.25);
+    }
+
+    .demo-chk-box {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      color: #08080a;
+      font-weight: 800;
+      font-size: 0.8rem;
+    }
+
+    .demo-task-row.checked .demo-chk-box {
+      background: var(--green);
+      border-color: var(--green);
+      box-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+    }
+
+    .demo-task-title {
+      flex: 1;
+      font-size: 0.9rem;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+
+    .demo-task-row.checked .demo-task-title {
+      color: var(--text-mid);
+      text-decoration: line-through;
+    }
+
+    .demo-stats-output {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .demo-score-display {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .demo-score-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      transition: color 0.3s ease;
+    }
+
+    .demo-score-val.perfect {
+      color: var(--green);
+      text-shadow: 0 0 24px rgba(74, 222, 128, 0.4);
+    }
+
+    .demo-verdict-pill {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 99px;
+      background: var(--gold-dim);
+      color: var(--gold2);
+      border: 1px solid var(--border-gold);
+      transition: all 0.3s ease;
+    }
+
+    .demo-verdict-pill.perfect {
+      background: var(--green-dim);
+      color: var(--green);
+      border-color: rgba(74, 222, 128, 0.3);
+    }
+
+    /* ── 3-STEP HOW IT WORKS ── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .step-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 30px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .step-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--border-gold);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 24px rgba(201, 168, 76, 0.08);
+    }
+
+    .step-number {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .step-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--gold-dim);
+      border: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 24px;
+      color: var(--gold2);
+    }
+
+    .step-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: var(--text-heading);
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .step-card-text {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+    }
+
+    /* ── WHY DAYFORGE / PHILOSOPHY ── */
+    .philosophy-card-banner {
+      background: linear-gradient(135deg, rgba(201, 168, 76, 0.05) 0%, rgba(17, 17, 22, 0.98) 100%);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-xl);
+      padding: 60px 48px;
+      margin-bottom: 32px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
+      text-align: center;
+    }
+
+    .philosophy-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--text-heading);
+      max-width: 760px;
+      margin: 0 auto 20px;
+    }
+
+    .philosophy-headline em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .philosophy-subcopy {
+      font-size: 1.05rem;
+      color: var(--text-mid);
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .pillar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .pillar-card:hover {
+      border-color: rgba(201, 168, 76, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .pillar-title {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .pillar-desc {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* ── REAL FEATURES GRID ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-box:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-gold);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(201, 168, 76, 0.05);
+    }
+
+    .feature-icon {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text-heading);
+      margin-bottom: 8px;
+    }
+
+    .feature-text {
+      font-size: 0.84rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* ── USER STATS ONBOARDING / LIVE SECTION ── */
+    .user-stats-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+
+    .stats-info-left h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--text-heading);
+      margin-bottom: 6px;
+    }
+
+    .stats-info-left p {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+    }
+
+    .live-stats-counters {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .live-stat-unit {
+      text-align: center;
+    }
+
+    .live-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .live-stat-lbl {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    /* ── BOTTOM CTA BANNER ── */
+    .cta-banner-section {
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 32px 140px;
+    }
+
+    .cta-box-card {
+      background: linear-gradient(180deg, rgba(201, 168, 76, 0.08) 0%, rgba(17, 17, 22, 0.95) 100%);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-xl);
+      padding: 64px 36px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 60px rgba(201, 168, 76, 0.1);
+    }
+
+    .cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      font-weight: 300;
+      color: var(--text-heading);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .cta-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .cta-subtitle {
+      font-size: 1rem;
+      color: var(--text-mid);
+      max-width: 540px;
+      margin: 0 auto 36px;
+      line-height: 1.65;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      position: relative;
+      z-index: 10;
+      border-top: 1px solid var(--border);
+      background: rgba(8, 8, 10, 0.98);
+      padding: 60px 32px 120px;
+    }
+
+    .footer-container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand-col {
+      max-width: 340px;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: var(--text-heading);
+      margin-bottom: 8px;
+    }
+
+    .footer-logo em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .footer-tagline {
+      font-size: 0.84rem;
+      color: var(--text-mid);
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+
+    .footer-author {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .footer-author strong {
+      color: var(--gold2);
+      font-weight: 400;
+    }
+
+    .footer-links-col {
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-group-title {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .footer-link {
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: var(--text-heading);
+    }
+
+    .footer-bottom-row {
+      max-width: var(--max-w);
+      margin: 40px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+
+    /* ── CONFETTI PARTICLES ── */
+    .cdot {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 9999;
+      animation: cpop 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes cpop {
+      0% { transform: scale(0) rotate(0); opacity: 1; }
+      100% { transform: scale(2.5) rotate(240deg) translate(var(--tx), var(--ty)); opacity: 0; }
+    }
+
+    /* RESPONSIVE FINE-TUNING */
+    @media (max-width: 768px) {
+      .section-wrap { padding: 70px 20px; }
+      .hero-section { padding: 110px 16px 50px; }
+      .mockup-body { padding: 20px 18px 24px; }
+      .mockup-progress-card { flex-direction: column; align-items: flex-start; }
+      .mockup-score-box { border-left: none; padding-left: 0; padding-top: 12px; border-top: 1px solid var(--border); width: 100%; }
+      .demo-sandbox-card { padding: 24px 18px; }
+      .philosophy-card-banner { padding: 36px 20px; }
+      .cta-box-card { padding: 40px 20px; }
+      .user-stats-banner { padding: 24px 20px; }
+      .live-stats-counters { width: 100%; justify-content: space-around; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+  <div class="amb amb-1"></div>
+  <div class="amb amb-2"></div>
+  <div class="amb amb-3"></div>
+
+  <!-- ── SITE HEADER / TOPBAR ── -->
+  <header class="site-header" id="siteHeader">
+    <div class="nav-container">
+      <a href="/" class="brand-link" aria-label="DayForge Home">
+        <div class="brand-logo-icon">⚒</div>
+        <span class="brand-title">Day<em>Forge</em></span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu">
+          <li><a href="#product" class="nav-link">Product</a></li>
+          <li><a href="#demo" class="nav-link">Demo</a></li>
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="#philosophy" class="nav-link">Philosophy</a></li>
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="https://github.com/vaibhavrsharma01-cell" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub ↗</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="/forge" class="btn-nav-primary">
+          <span>Open App ↗</span>
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU DRAWER -->
+  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <a href="#product" class="mobile-nav-link" onclick="closeDrawer()">Product</a>
+    <a href="#demo" class="mobile-nav-link" onclick="closeDrawer()">Interactive Demo</a>
+    <a href="#how-it-works" class="mobile-nav-link" onclick="closeDrawer()">How It Works</a>
+    <a href="#philosophy" class="mobile-nav-link" onclick="closeDrawer()">Philosophy</a>
+    <a href="#features" class="mobile-nav-link" onclick="closeDrawer()">Features</a>
+    <a href="https://github.com/vaibhavrsharma01-cell" target="_blank" rel="noopener noreferrer" class="mobile-nav-link" onclick="closeDrawer()">GitHub ↗</a>
+    <a href="/forge" class="btn-primary" style="margin-top: 16px;">
+      <span>Open DayForge →</span>
+    </a>
+  </div>
+
+  <main>
+    <!-- ── 1. HERO SECTION ── -->
+    <section class="hero-section" id="hero">
+      <div class="hero-eyebrow-badge">
+        <div class="hero-date-dot"></div>
+        <span id="heroLiveDate">Today · Personal Productivity System</span>
+      </div>
+
+      <h1 class="hero-title-main">
+        Day<span class="gold-italic">Forge.</span>
+      </h1>
+
+      <p class="hero-quote-quote">
+        "You don't find a great day — you <em>forge</em> it."
+      </p>
+
+      <p class="hero-subtext">
+        Build better routines, track your habits, and turn daily consistency into measurable long-term progress.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="/forge" class="btn-primary">
+          <span>Open DayForge</span>
+          <span class="btn-arrow">→</span>
+        </a>
+        <a href="#how-it-works" class="btn-secondary">
+          <span>See How It Works</span>
+        </a>
+      </div>
+
+      <div class="hero-trust-bar">
+        <div class="trust-item"><span class="icon">✓</span> Zero Account Required</div>
+        <div class="trust-item"><span class="icon">✓</span> Local Data Privacy</div>
+        <div class="trust-item"><span class="icon">✓</span> Instant Daily Score</div>
+        <div class="trust-item"><span class="icon">✓</span> Streak Engine</div>
+      </div>
+    </section>
+
+    <!-- ── 2. PRODUCT PREVIEW SECTION ── -->
+    <section class="preview-section" id="product" aria-label="Product Interface Preview">
+      <div class="preview-mockup-frame">
+        <div class="mockup-window-header">
+          <div class="mockup-window-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="mockup-window-title">dayforge.app / daily-dashboard</div>
+          <div class="mockup-window-badge">Live Interface</div>
+        </div>
+
+        <div class="mockup-body">
+          <div class="mockup-user-bar">
+            <div>
+              <div class="mockup-greeting-title">Good morning, <em>Vaibhav</em></div>
+              <div class="mockup-date-sub" id="mockupDate">—</div>
+            </div>
+            <div class="mockup-streak-pill">
+              <span class="mockup-streak-fire">🔥</span>
+              <div>
+                <div class="mockup-streak-text">12 Day Streak</div>
+                <div style="font-family:'Syne Mono',monospace;font-size:0.55rem;color:var(--text-dim);">Unstoppable Rhythm</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mockup-progress-card">
+            <div class="mockup-progress-left">
+              <div class="mockup-prog-header">
+                <span class="mockup-prog-lbl">Today's Progress</span>
+                <span class="mockup-prog-val">4 of 5 Done (80%)</span>
+              </div>
+              <div class="mockup-track">
+                <div class="mockup-fill"></div>
+              </div>
+            </div>
+            <div class="mockup-score-box">
+              <div>
+                <div class="mockup-score-lbl">Daily Score</div>
+                <div class="mockup-score-num">80<span style="font-size:1.2rem;color:var(--text-mid);">/100</span></div>
+              </div>
+              <div style="font-family:'Syne Mono',monospace;font-size:0.65rem;color:var(--gold);background:var(--gold-dim);padding:4px 10px;border-radius:99px;border:1px solid rgba(201,168,76,0.25);">
+                ✦ Exceptional
+              </div>
+            </div>
+          </div>
+
+          <div class="mockup-tasks-list">
+            <div class="mockup-task-item done">
+              <div class="mockup-task-check checked">✓</div>
+              <span class="mockup-task-emoji">🏋️</span>
+              <span class="mockup-task-name">Morning workout &amp; mobility</span>
+              <span class="mockup-task-time">07:00 AM · Morning</span>
+            </div>
+
+            <div class="mockup-task-item done">
+              <div class="mockup-task-check checked">✓</div>
+              <span class="mockup-task-emoji">📚</span>
+              <span class="mockup-task-name">Read 20 pages (System Thinking)</span>
+              <span class="mockup-task-time">08:30 AM · Morning</span>
+            </div>
+
+            <div class="mockup-task-item">
+              <div class="mockup-task-check empty"></div>
+              <span class="mockup-task-emoji">💻</span>
+              <span class="mockup-task-name">Code for 2 hours (DayForge Refactor)</span>
+              <span class="mockup-task-time">02:00 PM · Afternoon</span>
+            </div>
+
+            <div class="mockup-task-item done">
+              <div class="mockup-task-check checked">✓</div>
+              <span class="mockup-task-emoji">💧</span>
+              <span class="mockup-task-name">Drink 3L water throughout the day</span>
+              <span class="mockup-task-time">Anytime</span>
+            </div>
+
+            <div class="mockup-task-item done">
+              <div class="mockup-task-check checked">✓</div>
+              <span class="mockup-task-emoji">🧘</span>
+              <span class="mockup-task-name">Evening reflection &amp; journal</span>
+              <span class="mockup-task-time">09:00 PM · Night</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 8. INTERACTIVE DEMO SECTION ── -->
+    <section class="section-wrap" id="demo" aria-label="Interactive Demo Sandbox">
+      <div class="section-header">
+        <span class="section-eyebrow">Interactive Sandbox</span>
+        <h2 class="section-title">Experience <em>DayForge</em> Right Now</h2>
+        <p class="section-desc">Click any habit below to see dynamic score calculation, progress visualization, and completion celebrations in real-time.</p>
+      </div>
+
+      <div class="demo-sandbox-card">
+        <div class="demo-header-row">
+          <div class="demo-badge-live">
+            <span class="pulse-dot"></span>
+            <span>Interactive Demo</span>
+          </div>
+          <div class="demo-instruction">Click habits to toggle completion</div>
+        </div>
+
+        <div class="demo-tasks-interactive" id="demoTasksList">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <div class="demo-stats-output">
+          <div class="demo-score-display">
+            <div>
+              <div style="font-family:'Syne Mono',monospace;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-dim);margin-bottom:2px;">Today's Score</div>
+              <div class="demo-score-val" id="demoScoreNum">60%</div>
+            </div>
+            <div class="demo-verdict-pill" id="demoVerdictPill">◈ Solid Progress</div>
+          </div>
+
+          <div style="text-align:right;">
+            <a href="/forge" class="btn-primary" style="padding:10px 22px;font-size:0.75rem;">
+              <span>Open Real App →</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 4. HOW IT WORKS ── -->
+    <section class="section-wrap" id="how-it-works" aria-label="How DayForge Works">
+      <div class="section-header">
+        <span class="section-eyebrow">The 3-Step System</span>
+        <h2 class="section-title">Forge Your <em>Day</em></h2>
+        <p class="section-desc">"Simple enough to use every day. Powerful enough to change your routine."</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-number">01 — FORGE</span>
+          <div class="step-icon-wrap">⚒</div>
+          <h3 class="step-card-title">Build Your Routine</h3>
+          <p class="step-card-text">Define the core habits that truly move the needle. Organize rituals by time of day: Morning, Afternoon, Evening, or Anytime.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-number">02 — TRACK</span>
+          <div class="step-icon-wrap">🔥</div>
+          <h3 class="step-card-title">Tick &amp; Maintain Streaks</h3>
+          <p class="step-card-text">Execute each ritual with single-click checkoffs. Watch your live completion rate rise and build an unbroken chain of disciplined days.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-number">03 — REFLECT</span>
+          <div class="step-icon-wrap">◈</div>
+          <h3 class="step-card-title">Review &amp; Improve</h3>
+          <p class="step-card-text">Evaluate your daily score, analyze weekly completion rings, capture personal notes, and refine your habits for compound growth.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 5. WHY DAYFORGE / PHILOSOPHY ── -->
+    <section class="section-wrap" id="philosophy" aria-label="DayForge Philosophy">
+      <div class="philosophy-card-banner">
+        <span class="section-eyebrow">Product Philosophy</span>
+        <h2 class="philosophy-headline">
+          Most productivity apps manage tasks.<br>
+          <em>DayForge builds consistency.</em>
+        </h2>
+        <p class="philosophy-subcopy">
+          "DayForge is designed around the idea that meaningful progress comes from the things you repeatedly do — not just the things you plan."
+        </p>
+      </div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-title">01 · Discipline</div>
+          <p class="pillar-desc">Build dependable routines that become automatic through clear daily commitment and friction-free ritual execution.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-title">02 · Awareness</div>
+          <p class="pillar-desc">Gain honest feedback on your actual execution rate, eliminating illusions with quantifiable daily and weekly metrics.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-title">03 · Progress</div>
+          <p class="pillar-desc">Turn small, compounding daily actions into long-term personal mastery, momentum, and undeniable discipline.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 6. REAL FEATURES GRID ── -->
+    <section class="section-wrap" id="features" aria-label="DayForge Features">
+      <div class="section-header">
+        <span class="section-eyebrow">Engineered For Focus</span>
+        <h2 class="section-title">Built For The <em>Relentless</em></h2>
+        <p class="section-desc">Every feature inside DayForge is deliberately crafted to reinforce habit formation without bloat or distraction.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-box">
+          <div class="feature-icon">⚒</div>
+          <h3 class="feature-name">Daily Habit Tracking</h3>
+          <p class="feature-text">Custom ritual entries, instant emoji assignment, time-of-day tagging, and responsive checkoff actions.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">🔥</div>
+          <h3 class="feature-name">Streak Engine</h3>
+          <p class="feature-text">Calculates consecutive high-discipline days to keep your momentum alive and celebrate consistency milestones.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">🎯</div>
+          <h3 class="feature-name">Daily Score &amp; Verdict</h3>
+          <p class="feature-text">Instant algorithmic score rating from 'Just Starting' to 'Perfect Day' providing immediate accountability.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">⭕</div>
+          <h3 class="feature-name">Progress Visualization</h3>
+          <p class="feature-text">Glowing animated completion rings and habit breakdown bars that visually prove your daily achievements.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">⏱</div>
+          <h3 class="feature-name">Time-Blocked Rituals</h3>
+          <p class="feature-text">Structure your day seamlessly across Morning, Midday, Afternoon, Evening, and Night time allocations.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">✍️</div>
+          <h3 class="feature-name">Reflection Journal</h3>
+          <p class="feature-text">Capture daily observations, wins, and thoughts saved per day directly alongside your habit checklists.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">✦</div>
+          <h3 class="feature-name">Motivational Sparks</h3>
+          <p class="feature-text">Curated library of timeless philosophical wisdom across 7 categories with bookmarking to spark your drive.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">◈</div>
+          <h3 class="feature-name">Weekly Rings &amp; Analytics</h3>
+          <p class="feature-text">Interactive 7-day ring matrix, 30-day history timeline, and leaderboard of your highest-performing habits.</p>
+        </div>
+      </div>
+
+      <!-- ── 7. USER STATS / ONBOARDING ── -->
+      <div class="user-stats-banner" id="userStatsBanner">
+        <div class="stats-info-left">
+          <h3 id="statsBannerTitle">Your DayForge Journey</h3>
+          <p id="statsBannerDesc">Start forging today. Every tick is a vote for who you are becoming.</p>
+        </div>
+        <div class="live-stats-counters">
+          <div class="live-stat-unit">
+            <div class="live-stat-num" id="sDays">0</div>
+            <div class="live-stat-lbl">Days Logged</div>
+          </div>
+          <div class="live-stat-unit">
+            <div class="live-stat-num" id="sHabits">0</div>
+            <div class="live-stat-lbl">Habits Done</div>
+          </div>
+          <div class="live-stat-unit">
+            <div class="live-stat-num" id="sStreak" style="color:var(--amber);">0</div>
+            <div class="live-stat-lbl">Day Streak 🔥</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CALL TO ACTION BANNER ── -->
+    <section class="cta-banner-section" aria-label="Get Started Banner">
+      <div class="cta-box-card">
+        <h2 class="cta-title">
+          Stop Leaving Your Days To <em>Chance</em>
+        </h2>
+        <p class="cta-subtitle">
+          Join people building ironclad routines with DayForge. Zero sign-up required — start your day right now.
+        </p>
+        <a href="/forge" class="btn-primary">
+          <span>Open DayForge Now</span>
+          <span class="btn-arrow">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ── 12. FOOTER ── -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-brand-col">
+        <div class="footer-logo">Day<em>Forge</em></div>
+        <p class="footer-tagline">
+          Forge your perfect day — every day.<br>
+          A minimalist personal productivity system for the relentless.
+        </p>
+        <div class="footer-author">
+          Designed &amp; Built by <strong>Vaibhav Sharma</strong>
+        </div>
+      </div>
+
+      <div class="footer-links-col">
+        <div class="footer-links-group">
+          <span class="footer-group-title">Application</span>
+          <a href="/forge" class="footer-link">Daily Forge</a>
+          <a href="/sparks" class="footer-link">Wisdom Sparks</a>
+          <a href="/progress" class="footer-link">Progress &amp; Stats</a>
+        </div>
+
+        <div class="footer-links-group">
+          <span class="footer-group-title">System</span>
+          <a href="#how-it-works" class="footer-link">How It Works</a>
+          <a href="#philosophy" class="footer-link">Philosophy</a>
+          <a href="#features" class="footer-link">Features</a>
+          <a href="#demo" class="footer-link">Interactive Demo</a>
+        </div>
+
+        <div class="footer-links-group">
+          <span class="footer-group-title">Connect</span>
+          <a href="https://github.com/vaibhavrsharma01-cell" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub ↗</a>
+          <a href="https://vaibhavrsharma01-cell.github.io/vaibhav-portfolio/" target="_blank" rel="noopener noreferrer" class="footer-link">Portfolio ↗</a>
+          <a href="https://www.linkedin.com/in/vaibhav-sharma-a03025399" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom-row">
+      <div>© 2026 DayForge. All rights reserved.</div>
+      <div>Built with focus, discipline &amp; clarity.</div>
+    </div>
+  </footer>
+
+  <!-- ── FLOATING BOTTOM APP NAVIGATION ── -->
+  <nav class="app-bottom-nav" aria-label="Quick App Navigation">
+    <a class="nav-item active" href="/"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></a>
+    <a class="nav-item" href="/forge"><div class="nav-icon">⚒</div><div class="nav-label">Forge</div></a>
+    <a class="nav-item" href="/sparks"><div class="nav-icon">✦</div><div class="nav-label">Sparks</div></a>
+    <a class="nav-item" href="/progress"><div class="nav-icon">◈</div><div class="nav-label">Progress</div></a>
+  </nav>
+
+  <script>
+    // ── DATE DISPLAY ──
+    const now = new Date();
+    const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const SHORT_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    const dateStrLong = `${DAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()}`;
+    const dateStrShort = `${SHORT_MONTHS[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+    
+    const heroLiveDate = document.getElementById('heroLiveDate');
+    if (heroLiveDate) heroLiveDate.textContent = `${DAYS[now.getDay()]} · ${SHORT_MONTHS[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+    
+    const mockupDate = document.getElementById('mockupDate');
+    if (mockupDate) mockupDate.textContent = dateStrLong;
+
+    // ── HEADER SCROLL BLUR ──
+    const siteHeader = document.getElementById('siteHeader');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) {
+        siteHeader.classList.add('scrolled');
+      } else {
+        siteHeader.classList.remove('scrolled');
+      }
+    }, { passive: true });
+
+    // ── MOBILE MENU TOGGLE ──
+    const navToggle = document.getElementById('navToggle');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+
+    function toggleDrawer() {
+      const isOpen = navToggle.classList.toggle('open');
+      mobileDrawer.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', isOpen);
+      mobileDrawer.setAttribute('aria-hidden', !isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    function closeDrawer() {
+      navToggle.classList.remove('open');
+      mobileDrawer.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      mobileDrawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    if (navToggle) navToggle.addEventListener('click', toggleDrawer);
+
+    // ── REAL USER STATS DETECTION ──
+    function loadRealStats() {
+      let days = 0, habits = 0, run = 0;
+      const today = new Date();
+      for (let i = 0; i < 365; i++) {
+        const dt = new Date(today);
+        dt.setDate(dt.getDate() - i);
+        const s = localStorage.getItem('df_' + dt.toISOString().split('T')[0]);
+        if (s) {
+          try {
+            const data = JSON.parse(s), t = data.tasks || [];
+            const done = t.filter(x => x.done).length;
+            if (t.length > 0) {
+              days++;
+              habits += done;
+              if (i === run && done > 0) run++;
+            }
+          } catch(e) {}
+        }
+      }
+
+      if (days > 0) {
+        const titleEl = document.getElementById('statsBannerTitle');
+        const descEl = document.getElementById('statsBannerDesc');
+        if (titleEl) titleEl.textContent = "Your DayForge Stats";
+        if (descEl) descEl.textContent = "Great discipline! Here is your live personal progress synced from this browser.";
+      }
+
+      animNum('sDays', days);
+      animNum('sHabits', habits);
+      animNum('sStreak', run);
+    }
+
+    function animNum(id, target) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (target === 0) { el.textContent = '0'; return; }
+      let cur = 0;
+      const step = Math.max(1, Math.ceil(target / 20));
+      const timer = setInterval(() => {
+        cur = Math.min(cur + step, target);
+        el.textContent = cur;
+        if (cur >= target) clearInterval(timer);
+      }, 50);
+    }
+
+    // ── CONFETTI BURST ──
+    function confetti(x, y) {
+      const colors = ['#c9a84c', '#4ade80', '#e8c97a', '#fbbf24', '#ffffff'];
+      for (let i = 0; i < 14; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'cdot';
+        const tx = (Math.random() - 0.5) * 120 + 'px';
+        const ty = (Math.random() - 0.5) * 120 + 'px';
+        dot.style.cssText = `left:${x}px;top:${y}px;background:${colors[i % colors.length]};--tx:${tx};--ty:${ty};animation-delay:${i * 0.03}s;`;
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 800);
+      }
+    }
+
+    // ── 8. INTERACTIVE DEMO ENGINE (ISOLATED SANDBOX) ──
+    const demoHabits = [
+      { id: 'd1', emoji: '🏋️', text: 'Morning workout & stretch', time: 'Morning', done: true },
+      { id: 'd2', emoji: '📚', text: 'Read 20 pages of non-fiction', time: 'Morning', done: true },
+      { id: 'd3', emoji: '💻', text: 'Deep work sprint (2 hours)', time: 'Afternoon', done: false },
+      { id: 'd4', emoji: '💧', text: 'Hydrate 3L of water', time: 'Anytime', done: true },
+      { id: 'd5', emoji: '🧘', text: 'Mindful meditation & review', time: 'Night', done: false }
+    ];
+
+    function renderDemo() {
+      const container = document.getElementById('demoTasksList');
+      if (!container) return;
+      container.innerHTML = '';
+
+      demoHabits.forEach((task, index) => {
+        const row = document.createElement('div');
+        row.className = 'demo-task-row' + (task.done ? ' checked' : '');
+        row.innerHTML = `
+          <div class="demo-chk-box">${task.done ? '✓' : ''}</div>
+          <span style="font-size:1.15rem;">${task.emoji}</span>
+          <span class="demo-task-title">${task.text}</span>
+          <span style="font-family:'Syne Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;color:var(--text-dim);background:rgba(255,255,255,0.03);padding:3px 8px;border-radius:4px;border:1px solid var(--border);">${task.time}</span>
+        `;
+
+        row.addEventListener('click', (e) => {
+          task.done = !task.done;
+          if (task.done) {
+            const rect = row.getBoundingClientRect();
+            confetti(rect.left + 24, rect.top + rect.height / 2);
+          }
+          renderDemo();
+        });
+
+        container.appendChild(row);
+      });
+
+      // Recalculate demo score
+      const total = demoHabits.length;
+      const done = demoHabits.filter(t => t.done).length;
+      const pct = Math.round((done / total) * 100);
+
+      const scoreNumEl = document.getElementById('demoScoreNum');
+      const verdictEl = document.getElementById('demoVerdictPill');
+
+      if (scoreNumEl) {
+        scoreNumEl.textContent = pct + '%';
+        scoreNumEl.className = 'demo-score-val' + (pct === 100 ? ' perfect' : '');
+      }
+
+      if (verdictEl) {
+        let text = '◌ Just Starting';
+        let cls = 'demo-verdict-pill';
+        if (pct === 100) { text = '✦ Perfect Day'; cls += ' perfect'; }
+        else if (pct >= 75) { text = '✦ Exceptional'; }
+        else if (pct >= 50) { text = '◈ Solid Progress'; }
+        else if (pct >= 25) { text = '◌ Keep Going'; }
+        verdictEl.textContent = text;
+        verdictEl.className = cls;
+      }
+    }
+
+    // ── INTERSECTION OBSERVER SCROLL REVEALS ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.transition = 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)';
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.step-card, .pillar-card, .feature-box, .section-header, .philosophy-card-banner, .cta-box-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
+      observer.observe(el);
+    });
+
+    // Initialize
+    renderDemo();
+    loadRealStats();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forge — DayForge</title>
+  <meta name="description" content="Forge your daily routine, check off habits, track progress, and calculate your daily score.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/shared.css">
+  <style>
+    /* PAGE HEADER */
+    .page-container {
+      position: relative;
+      z-index: 10;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 100px 20px 140px;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.55s ease both;
+    }
+
+    .brand-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--text-heading);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-headline em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .page-tag-label {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .date-block {
+      text-align: right;
+      padding: 12px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .date-day {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--gold);
+    }
+
+    .date-sub {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      color: var(--text-mid);
+      margin-top: 4px;
+    }
+
+    /* FORGE CARD */
+    .forge-card {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset, 0 24px 60px rgba(0,0,0,0.6);
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(to right, rgba(201,168,76,0.05), transparent);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .topbar-label {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .prow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ptrack {
+      width: 150px;
+      height: 4px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 99px;
+      overflow: visible;
+      position: relative;
+    }
+
+    .pfill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(to right, var(--gold), var(--green));
+      transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 0 10px rgba(201,168,76,0.4);
+      width: 0%;
+    }
+
+    .pglow {
+      position: absolute;
+      right: -2px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold2);
+      box-shadow: 0 0 10px 2px rgba(201,168,76,0.7);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .pfill.on .pglow {
+      opacity: 1;
+    }
+
+    .pnum {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--gold);
+      min-width: 44px;
+      text-align: right;
+      font-weight: 600;
+    }
+
+    /* TASK LIST */
+    .task-list {
+      list-style: none;
+    }
+
+    .task-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 24px;
+      min-height: 62px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      transition: background 0.2s ease;
+      animation: rowIn 0.35s ease both;
+    }
+
+    .task-row::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--gold);
+      transform: scaleY(0);
+      transition: transform 0.25s ease;
+      transform-origin: bottom;
+    }
+
+    .task-row.done::before {
+      transform: scaleY(1);
+    }
+
+    .task-row:hover {
+      background: rgba(255,255,255,0.015);
+    }
+
+    .task-row.done {
+      background: rgba(74,222,128,0.025);
+    }
+
+    .row-idx {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.58rem;
+      color: var(--text-dim);
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .chk {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+      background: transparent;
+      flex-shrink: 0;
+    }
+
+    .chk:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(201,168,76,0.25);
+    }
+
+    .chk.done {
+      background: var(--green);
+      border-color: var(--green);
+      box-shadow: 0 0 14px rgba(74,222,128,0.35);
+    }
+
+    .chk.done::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 9px;
+      border-right: 2px solid #0a0a0c;
+      border-bottom: 2px solid #0a0a0c;
+      transform: translate(-60%, -60%) rotate(40deg);
+    }
+
+    .emoji-btn {
+      font-size: 1.15rem;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .emoji-btn:hover {
+      background: var(--gold-dim);
+      border-color: var(--gold);
+      transform: scale(1.08);
+      box-shadow: 0 0 12px var(--gold-dim);
+    }
+
+    .task-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.92rem;
+      color: var(--text-heading);
+      min-width: 0;
+      transition: color 0.2s;
+    }
+
+    .task-input::placeholder {
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    .task-row.done .task-input {
+      text-decoration: line-through;
+      color: var(--text-mid);
+    }
+
+    .time-tag {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 4px 9px;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .time-tag:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    .del-btn {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .task-row:hover .del-btn {
+      opacity: 1;
+    }
+
+    .del-btn:hover {
+      background: var(--red-dim);
+      color: var(--red);
+    }
+
+    .add-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 24px;
+      min-height: 54px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .add-row:hover {
+      background: var(--gold-glow);
+    }
+
+    .add-icon {
+      width: 22px;
+      height: 22px;
+      border: 1px dashed rgba(201,168,76,0.35);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 0.95rem;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .add-row:hover .add-icon {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+      box-shadow: 0 0 10px var(--gold-dim);
+    }
+
+    .add-label {
+      font-size: 0.84rem;
+      color: var(--text-dim);
+      font-style: italic;
+      transition: color 0.15s;
+    }
+
+    .add-row:hover .add-label {
+      color: var(--text-mid);
+    }
+
+    /* NOTES */
+    .notes-wrap {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .notes-label {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .notes-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--text);
+      resize: none;
+      width: 100%;
+      min-height: 56px;
+      line-height: 1.6;
+      transition: color 0.2s;
+    }
+
+    .notes-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    /* SUMMARY */
+    .summary {
+      padding: 32px 24px;
+      background: linear-gradient(135deg, rgba(201,168,76,0.03) 0%, rgba(74,222,128,0.02) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      opacity: 0.3;
+    }
+
+    .sum-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .score-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .score-lbl {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .score-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5.2rem;
+      font-weight: 300;
+      line-height: 1;
+      transition: color 0.5s ease;
+      color: var(--text-dim);
+    }
+
+    .score-val.lit {
+      color: var(--gold);
+      text-shadow: 0 0 40px rgba(201,168,76,0.3);
+    }
+
+    .score-val.perfect {
+      color: var(--green);
+      text-shadow: 0 0 40px rgba(74,222,128,0.3);
+    }
+
+    .verdict {
+      display: inline-block;
+      padding: 7px 18px;
+      border-radius: 99px;
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      transition: all 0.4s ease;
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-mid);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .v-gold  { background: var(--gold-dim); border-color: rgba(201,168,76,0.3); color: var(--gold2); box-shadow: 0 0 20px var(--gold-dim); }
+    .v-green { background: var(--green-dim); border-color: rgba(74,222,128,0.3); color: var(--green); box-shadow: 0 0 20px var(--green-dim); }
+    .v-amber { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.25); color: var(--amber); }
+    .v-red   { background: var(--red-dim); border-color: rgba(248,113,113,0.2); color: var(--red); }
+
+    .ring-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ring-svg {
+      width: 96px;
+      height: 96px;
+      transform: rotate(-90deg);
+    }
+
+    .ring-track {
+      fill: none;
+      stroke: rgba(255,255,255,0.05);
+      stroke-width: 7;
+    }
+
+    .ring-fill {
+      fill: none;
+      stroke-width: 7;
+      stroke-linecap: round;
+      stroke-dasharray: 251.2;
+      stroke-dashoffset: 251.2;
+      transition: stroke-dashoffset 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), stroke 0.5s ease;
+    }
+
+    .ring-lbl {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .bars-title {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+    }
+
+    .hbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .hbar-em {
+      font-size: 0.9rem;
+      width: 22px;
+      text-align: center;
+    }
+
+    .hbar-name {
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
+    }
+
+    .hbar-track {
+      flex: 1;
+      height: 4px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 99px;
+      overflow: hidden;
+      max-width: 240px;
+    }
+
+    .hbar-fill {
+      height: 100%;
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .hbar-fill.done {
+      background: linear-gradient(to right, var(--gold), var(--green));
+      box-shadow: 0 0 6px rgba(74,222,128,0.3);
+    }
+
+    .hbar-fill.undone {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .hbar-dot {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.68rem;
+      width: 16px;
+      text-align: center;
+    }
+
+    /* PICKERS */
+    #emojiPicker {
+      position: fixed;
+      z-index: 999;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.7);
+      padding: 10px;
+      display: none;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      width: 220px;
+      backdrop-filter: blur(20px);
+    }
+
+    #emojiPicker button {
+      font-size: 1.15rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 7px;
+      border-radius: 7px;
+      transition: background 0.1s;
+      line-height: 1;
+    }
+
+    #emojiPicker button:hover {
+      background: var(--gold-dim);
+    }
+
+    .tpop {
+      position: fixed;
+      z-index: 998;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      width: 200px;
+      backdrop-filter: blur(20px);
+    }
+
+    .topt {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.65rem;
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: transparent;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .topt:hover {
+      background: var(--gold-dim);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* CONFETTI */
+    .cdot {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 9999;
+      animation: cpop 0.75s ease-out both;
+    }
+
+    @keyframes cpop {
+      0% { transform: scale(0) rotate(0); opacity: 1; }
+      100% { transform: scale(3) rotate(180deg) translate(var(--tx), var(--ty)); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="amb amb-1"></div>
+  <div class="amb amb-2"></div>
+
+  <!-- ── SITE HEADER ── -->
+  <header class="site-header scrolled">
+    <div class="nav-container">
+      <a href="/" class="brand-link" aria-label="DayForge Home">
+        <div class="brand-logo-icon">⚒</div>
+        <span class="brand-title">Day<em>Forge</em></span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/forge" class="nav-link active">Forge</a></li>
+          <li><a href="/sparks" class="nav-link">Sparks</a></li>
+          <li><a href="/progress" class="nav-link">Progress</a></li>
+          <li><a href="https://github.com/vaibhavrsharma01-cell" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub ↗</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="/" class="btn-secondary" style="padding:7px 16px;font-size:0.68rem;">
+          <span>← Back Home</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="page-header">
+      <div>
+        <div class="brand-headline">Daily <em>Forge</em></div>
+        <div class="page-tag-label">⚒ Daily Rituals &amp; Habit Tracker</div>
+      </div>
+      <div class="date-block">
+        <div class="date-day" id="dateDay">—</div>
+        <div class="date-sub" id="dateSub">—</div>
+      </div>
+    </div>
+
+    <div class="forge-card">
+      <div class="topbar">
+        <div class="topbar-label">
+          <span style="color:var(--gold);">●</span>
+          <span>Today's Habits</span>
+        </div>
+        <div class="prow">
+          <div class="ptrack"><div class="pfill" id="pfill"><div class="pglow"></div></div></div>
+          <div class="pnum" id="pnum">0 / 0</div>
+        </div>
+      </div>
+
+      <ul class="task-list" id="taskList"></ul>
+
+      <div class="add-row" id="addRow">
+        <div class="add-icon">+</div>
+        <div class="add-label">Add a new ritual or habit…</div>
+      </div>
+
+      <div class="notes-wrap">
+        <div class="notes-label">Daily Notes &amp; Reflections</div>
+        <textarea class="notes-input" id="notesInput" placeholder="Record wins, reflections, or lessons from today…" rows="2"></textarea>
+      </div>
+
+      <div class="summary">
+        <div class="sum-top">
+          <div class="score-group">
+            <div class="score-lbl">Daily Score</div>
+            <div class="score-val" id="scoreVal">0%</div>
+            <div class="verdict" id="verdict">Add habits to begin</div>
+          </div>
+          <div class="ring-wrap">
+            <svg class="ring-svg" viewBox="0 0 90 90">
+              <circle class="ring-track" cx="45" cy="45" r="40"/>
+              <circle class="ring-fill" id="ringFill" cx="45" cy="45" r="40"/>
+            </svg>
+            <div class="ring-lbl">Completion</div>
+          </div>
+        </div>
+        <div class="bars-title">Habit Breakdown</div>
+        <div id="summaryBars"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── FLOATING BOTTOM APP NAVIGATION ── -->
+  <nav class="app-bottom-nav" aria-label="Quick App Navigation">
+    <a class="nav-item" href="/"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></a>
+    <a class="nav-item active" href="/forge"><div class="nav-icon">⚒</div><div class="nav-label">Forge</div></a>
+    <a class="nav-item" href="/sparks"><div class="nav-icon">✦</div><div class="nav-label">Sparks</div></a>
+    <a class="nav-item" href="/progress"><div class="nav-icon">◈</div><div class="nav-label">Progress</div></a>
+  </nav>
+
+  <div id="emojiPicker"></div>
+
+  <script>
+    const EMOJIS = ['🏋️','🥗','💧','📚','🧘','🏃','😴','💊','🎯','✍️','🎨','🎵','🧹','💼','🐾','🌿','🧠','💬','🛁','☀️','🍎','🚴','🌙','⚡','🔥','🏊','🧗','🎤'];
+    const TIMES = ['Morning','Midday','Afternoon','Evening','Night','Anytime','6 AM','7 AM','8 AM','9 AM','12 PM','6 PM','9 PM'];
+    let tasks = [];
+
+    function setDate() {
+      const d = new Date();
+      const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      const MONS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      document.getElementById('dateDay').textContent = DAYS[d.getDay()];
+      document.getElementById('dateSub').textContent = `${MONS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    }
+
+    const key = () => 'df_' + new Date().toISOString().split('T')[0];
+    const uid = () => Math.random().toString(36).slice(2, 9);
+    const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    function save() {
+      localStorage.setItem(key(), JSON.stringify({
+        tasks,
+        notes: document.getElementById('notesInput').value
+      }));
+    }
+
+    function load() {
+      const s = localStorage.getItem(key());
+      if (s) {
+        try {
+          const d = JSON.parse(s);
+          tasks = d.tasks || [];
+          document.getElementById('notesInput').value = d.notes || '';
+        } catch(e) {}
+      } else {
+        tasks = [
+          { id: uid(), emoji: '🏋️', text: 'Gym / Workout', done: false, time: 'Morning' },
+          { id: uid(), emoji: '🥗', text: 'Eat Healthy', done: false, time: 'Anytime' },
+          { id: uid(), emoji: '💧', text: 'Drink 8 glasses of water', done: false, time: 'Anytime' },
+          { id: uid(), emoji: '📚', text: 'Read or Study', done: false, time: 'Evening' },
+          { id: uid(), emoji: '🧘', text: 'Meditate / Breathe', done: false, time: 'Morning' },
+          { id: uid(), emoji: '😴', text: 'Sleep by 11 PM', done: false, time: 'Night' }
+        ];
+      }
+    }
+
+    function render() {
+      setDate();
+      renderTasks();
+      updateProgress();
+      updateSummary();
+    }
+
+    function renderTasks() {
+      const ul = document.getElementById('taskList');
+      ul.innerHTML = '';
+      tasks.forEach((t, i) => {
+        const li = document.createElement('li');
+        li.className = 'task-row' + (t.done ? ' done' : '');
+        li.dataset.id = t.id;
+        li.style.animationDelay = (i * 0.04) + 's';
+        li.innerHTML = `
+          <span class="row-idx">${String(i + 1).padStart(2, '0')}</span>
+          <div class="chk ${t.done ? 'done' : ''}" data-action="check" data-id="${t.id}" title="Toggle completion"></div>
+          <div class="emoji-btn" data-action="emoji" data-id="${t.id}" title="Change icon">${t.emoji}</div>
+          <input class="task-input" value="${esc(t.text)}" placeholder="Name this habit…" data-action="text" data-id="${t.id}" spellcheck="false"/>
+          <div class="time-tag" data-action="time" data-id="${t.id}" title="Set time of day">${t.time}</div>
+          <button class="del-btn" data-action="del" data-id="${t.id}" title="Delete habit">✕</button>
+        `;
+        ul.appendChild(li);
+      });
+    }
+
+    function updateProgress() {
+      const done = tasks.filter(t => t.done).length;
+      const total = tasks.length;
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      const fill = document.getElementById('pfill');
+      fill.style.width = pct + '%';
+      fill.classList.toggle('on', pct > 0 && pct < 100);
+      document.getElementById('pnum').textContent = `${done} / ${total}`;
+    }
+
+    function updateSummary() {
+      const done = tasks.filter(t => t.done).length;
+      const total = tasks.length;
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      const sv = document.getElementById('scoreVal');
+      sv.textContent = pct + '%';
+      let sc = '', vc = '', vt = '';
+      if (!total) { sc = ''; vc = ''; vt = 'Add habits to begin'; }
+      else if (pct === 100) { sc = 'perfect'; vc = 'v-green'; vt = '✦ Perfect Day'; }
+      else if (pct >= 75) { sc = 'lit'; vc = 'v-gold'; vt = '✦ Exceptional'; }
+      else if (pct >= 50) { sc = 'lit'; vc = 'v-amber'; vt = '◈ Solid Progress'; }
+      else if (pct >= 25) { sc = ''; vc = 'v-red'; vt = '◌ Keep Going'; }
+      else { sc = ''; vc = 'v-red'; vt = '◌ Just Starting'; }
+      sv.className = 'score-val ' + sc;
+      const vEl = document.getElementById('verdict');
+      vEl.className = 'verdict ' + vc;
+      vEl.textContent = vt;
+
+      const ring = document.getElementById('ringFill');
+      ring.style.strokeDashoffset = 251.2 - (pct / 100) * 251.2;
+      ring.style.stroke = pct >= 100 ? '#4ade80' : pct >= 50 ? '#c9a84c' : pct > 0 ? '#e8c97a' : 'rgba(255,255,255,0.05)';
+
+      const bars = document.getElementById('summaryBars');
+      bars.innerHTML = '';
+      tasks.forEach(t => {
+        const r = document.createElement('div');
+        r.className = 'hbar';
+        r.innerHTML = `
+          <div class="hbar-em">${t.emoji}</div>
+          <div class="hbar-name">${esc(t.text) || 'Unnamed'}</div>
+          <div class="hbar-track"><div class="hbar-fill ${t.done ? 'done' : 'undone'}" style="width:${t.done ? 100 : 0}%"></div></div>
+          <div class="hbar-dot" style="color:${t.done ? 'var(--green)' : 'var(--text-dim)'}">${t.done ? '✓' : '·'}</div>
+        `;
+        bars.appendChild(r);
+      });
+    }
+
+    function confetti(x, y) {
+      const cols = ['#c9a84c', '#4ade80', '#e8c97a', '#fbbf24', '#fff'];
+      for (let i = 0; i < 12; i++) {
+        const d = document.createElement('div');
+        d.className = 'cdot';
+        const tx = (Math.random() - 0.5) * 90 + 'px';
+        const ty = (Math.random() - 0.5) * 90 + 'px';
+        d.style.cssText = `left:${x}px;top:${y}px;background:${cols[i % cols.length]};--tx:${tx};--ty:${ty};animation-delay:${i * 0.03}s`;
+        document.body.appendChild(d);
+        setTimeout(() => d.remove(), 800);
+      }
+    }
+
+    document.getElementById('taskList').addEventListener('click', e => {
+      const a = e.target.dataset.action;
+      const id = e.target.dataset.id;
+      if (!a || !id) return;
+      if (a === 'check') {
+        const t = tasks.find(x => x.id === id);
+        if (!t) return;
+        t.done = !t.done;
+        if (t.done) {
+          const r = e.target.getBoundingClientRect();
+          confetti(r.left + r.width / 2, r.top + r.height / 2);
+        }
+        save();
+        render();
+      } else if (a === 'del') {
+        tasks = tasks.filter(x => x.id !== id);
+        save();
+        render();
+      } else if (a === 'emoji') {
+        openEmoji(id, e.target);
+      } else if (a === 'time') {
+        openTime(id, e.target);
+      }
+    });
+
+    document.getElementById('taskList').addEventListener('input', e => {
+      if (e.target.dataset.action === 'text') {
+        const t = tasks.find(x => x.id === e.target.dataset.id);
+        if (t) {
+          t.text = e.target.value;
+          save();
+          updateSummary();
+        }
+      }
+    });
+
+    document.getElementById('taskList').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.target.dataset.action === 'text') {
+        e.preventDefault();
+        document.getElementById('addRow').click();
+      }
+    });
+
+    document.getElementById('addRow').addEventListener('click', () => {
+      tasks.push({ id: uid(), emoji: '🎯', text: '', done: false, time: 'Anytime' });
+      save();
+      render();
+      setTimeout(() => {
+        const ins = document.querySelectorAll('.task-input');
+        if (ins.length) ins[ins.length - 1].focus();
+      }, 60);
+    });
+
+    document.getElementById('notesInput').addEventListener('input', save);
+
+    function openEmoji(id, anchor) {
+      const p = document.getElementById('emojiPicker');
+      p.innerHTML = '';
+      EMOJIS.forEach(em => {
+        const b = document.createElement('button');
+        b.textContent = em;
+        b.addEventListener('click', ev => {
+          ev.stopPropagation();
+          const t = tasks.find(x => x.id === id);
+          if (t) { t.emoji = em; save(); render(); }
+          p.style.display = 'none';
+        });
+        p.appendChild(b);
+      });
+      const r = anchor.getBoundingClientRect();
+      p.style.display = 'grid';
+      p.style.top = (r.bottom + 6) + 'px';
+      p.style.left = Math.min(r.left, window.innerWidth - 230) + 'px';
+    }
+
+    function openTime(id, anchor) {
+      document.querySelectorAll('.tpop').forEach(x => x.remove());
+      const pop = document.createElement('div');
+      pop.className = 'tpop';
+      TIMES.forEach(t => {
+        const b = document.createElement('button');
+        b.className = 'topt';
+        b.textContent = t;
+        b.addEventListener('click', ev => {
+          ev.stopPropagation();
+          const task = tasks.find(x => x.id === id);
+          if (task) { task.time = t; save(); render(); }
+          pop.remove();
+        });
+        pop.appendChild(b);
+      });
+      const r = anchor.getBoundingClientRect();
+      pop.style.top = (r.bottom + 6) + 'px';
+      pop.style.left = Math.min(r.left, window.innerWidth - 210) + 'px';
+      document.body.appendChild(pop);
+    }
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#emojiPicker') && !e.target.closest('[data-action="emoji"]')) {
+        document.getElementById('emojiPicker').style.display = 'none';
+      }
+      if (!e.target.closest('.tpop') && !e.target.closest('[data-action="time"]')) {
+        document.querySelectorAll('.tpop').forEach(x => x.remove());
+      }
+    });
+
+    load();
+    render();
+  </script>
+</body>
+</html>

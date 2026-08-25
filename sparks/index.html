@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sparks — DayForge</title>
+  <meta name="description" content="Curated philosophical wisdom and daily sparks from the greatest minds to ignite your consistency.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/shared.css">
+  <style>
+    .sparks-container {
+      position: relative;
+      z-index: 10;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 100px 20px 140px;
+    }
+
+    /* HERO QUOTE */
+    .spark-hero {
+      min-height: 48vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 36px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      overflow: hidden;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .spark-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .hero-glyph {
+      position: absolute;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18rem;
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(201, 168, 76, 0.03);
+      pointer-events: none;
+      line-height: 1;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .spark-hero-label {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .spark-quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--text-heading);
+      max-width: 680px;
+      margin-bottom: 20px;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .spark-quote-author {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      transition: opacity 0.4s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .spark-quote-author::before {
+      content: '— ';
+    }
+
+    .spark-actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .spark-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 99px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid var(--border2);
+      background: transparent;
+      color: var(--text-mid);
+    }
+
+    .spark-btn:hover {
+      border-color: rgba(201, 168, 76, 0.4);
+      color: var(--gold);
+      background: var(--gold-dim);
+      box-shadow: 0 0 16px var(--gold-dim);
+    }
+
+    .spark-btn.primary {
+      background: var(--gold-dim);
+      border-color: rgba(201, 168, 76, 0.3);
+      color: var(--gold2);
+      font-weight: 600;
+    }
+
+    .spark-btn.primary:hover {
+      background: rgba(201, 168, 76, 0.22);
+      box-shadow: 0 0 24px var(--gold-dim);
+    }
+
+    /* CATEGORIES BAR */
+    .categories {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+
+    .cat-btn {
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .cat-btn:hover {
+      border-color: var(--border2);
+      color: var(--text-mid);
+    }
+
+    .cat-btn.active {
+      background: var(--gold-dim);
+      border-color: rgba(201, 168, 76, 0.35);
+      color: var(--gold);
+      box-shadow: 0 0 16px rgba(201, 168, 76, 0.12);
+    }
+
+    /* QUOTES GRID */
+    .quotes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .q-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      position: relative;
+      transition: all 0.22s ease;
+      animation: fadeUp 0.4s ease both;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .q-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .q-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(201, 168, 76, 0.25);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+    }
+
+    .q-card:hover::before {
+      opacity: 1;
+    }
+
+    .q-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: rgba(201, 168, 76, 0.15);
+      line-height: 1;
+      margin-bottom: -6px;
+    }
+
+    .q-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.12rem;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.55;
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+
+    .q-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .q-author {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .q-cat {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      border-radius: 99px;
+    }
+
+    .q-fav {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 28px; height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-dim);
+      opacity: 0;
+    }
+
+    .q-card:hover .q-fav {
+      opacity: 1;
+    }
+
+    .q-fav:hover {
+      background: rgba(201, 168, 76, 0.12);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .q-fav.faved {
+      opacity: 1;
+      color: var(--gold);
+      border-color: rgba(201, 168, 76, 0.4);
+      background: var(--gold-dim);
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="amb amb-1"></div>
+  <div class="amb amb-2"></div>
+
+  <!-- ── SITE HEADER ── -->
+  <header class="site-header scrolled">
+    <div class="nav-container">
+      <a href="/" class="brand-link" aria-label="DayForge Home">
+        <div class="brand-logo-icon">⚒</div>
+        <span class="brand-title">Day<em>Forge</em></span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/forge" class="nav-link">Forge</a></li>
+          <li><a href="/sparks" class="nav-link active">Sparks</a></li>
+          <li><a href="/progress" class="nav-link">Progress</a></li>
+          <li><a href="https://github.com/vaibhavrsharma01-cell" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub ↗</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="/forge" class="btn-primary" style="padding:7px 16px;font-size:0.7rem;">
+          <span>Open Forge →</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="sparks-container">
+    <!-- HERO QUOTE -->
+    <section class="spark-hero">
+      <div class="hero-glyph">"</div>
+      <div class="spark-hero-label">
+        <span style="color:var(--gold);">✦</span>
+        <span>Daily Spark &amp; Wisdom</span>
+      </div>
+      <div class="spark-quote-text" id="heroText">Loading…</div>
+      <div class="spark-quote-author" id="heroAuthor"></div>
+      <div class="spark-actions">
+        <button class="spark-btn primary" id="btnNext">↻ New Spark</button>
+        <button class="spark-btn" id="btnFavHero">♡ Save</button>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <div class="categories" id="catBar"></div>
+
+    <!-- QUOTE GRID -->
+    <div class="quotes-grid" id="quotesGrid"></div>
+  </main>
+
+  <!-- ── FLOATING BOTTOM APP NAVIGATION ── -->
+  <nav class="app-bottom-nav" aria-label="Quick App Navigation">
+    <a class="nav-item" href="/"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></a>
+    <a class="nav-item" href="/forge"><div class="nav-icon">⚒</div><div class="nav-label">Forge</div></a>
+    <a class="nav-item active" href="/sparks"><div class="nav-icon">✦</div><div class="nav-label">Sparks</div></a>
+    <a class="nav-item" href="/progress"><div class="nav-icon">◈</div><div class="nav-label">Progress</div></a>
+  </nav>
+
+  <script>
+    const QUOTES = [
+      { text: "We are what we repeatedly do. Excellence, then, is not an act, but a habit.", author: "Aristotle", cat: "Habits" },
+      { text: "The secret of getting ahead is getting started.", author: "Mark Twain", cat: "Action" },
+      { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius", cat: "Consistency" },
+      { text: "Discipline is the bridge between goals and accomplishment.", author: "Jim Rohn", cat: "Discipline" },
+      { text: "You don't rise to the level of your goals. You fall to the level of your systems.", author: "James Clear", cat: "Habits" },
+      { text: "The only way to do great work is to love what you do.", author: "Steve Jobs", cat: "Purpose" },
+      { text: "Small daily improvements are the key to staggering long-term results.", author: "Robin Sharma", cat: "Consistency" },
+      { text: "Success is the sum of small efforts, repeated day in and day out.", author: "Robert Collier", cat: "Consistency" },
+      { text: "Motivation gets you going. Habit keeps you growing.", author: "John C. Maxwell", cat: "Habits" },
+      { text: "The groundwork for all happiness is good health.", author: "Leigh Hunt", cat: "Health" },
+      { text: "A year from now you may wish you had started today.", author: "Karen Lamb", cat: "Action" },
+      { text: "Take care of your body. It's the only place you have to live.", author: "Jim Rohn", cat: "Health" },
+      { text: "An investment in knowledge pays the best interest.", author: "Benjamin Franklin", cat: "Growth" },
+      { text: "The mind is everything. What you think, you become.", author: "Buddha", cat: "Mindset" },
+      { text: "Either you run the day or the day runs you.", author: "Jim Rohn", cat: "Discipline" },
+      { text: "Forge yourself daily. Iron doesn't become steel without heat.", author: "DayForge", cat: "Mindset" },
+      { text: "What you do today can improve all your tomorrows.", author: "Ralph Marston", cat: "Action" },
+      { text: "You have power over your mind, not outside events. Realize this, and you will find strength.", author: "Marcus Aurelius", cat: "Mindset" },
+      { text: "Do something today that your future self will thank you for.", author: "Sean Patrick Flanery", cat: "Action" },
+      { text: "The first wealth is health.", author: "Ralph Waldo Emerson", cat: "Health" },
+      { text: "It always seems impossible until it's done.", author: "Nelson Mandela", cat: "Consistency" },
+      { text: "Knowing is not enough; we must apply. Willing is not enough; we must do.", author: "Johann Wolfgang von Goethe", cat: "Action" },
+      { text: "Sleep is the best meditation.", author: "Dalai Lama", cat: "Health" },
+      { text: "Reading is to the mind what exercise is to the body.", author: "Joseph Addison", cat: "Growth" },
+      { text: "We first make our habits, and then our habits make us.", author: "John Dryden", cat: "Habits" },
+      { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt", cat: "Mindset" },
+      { text: "Strive not to be a success, but rather to be of value.", author: "Albert Einstein", cat: "Purpose" },
+      { text: "The successful warrior is the average man, with laser-like focus.", author: "Bruce Lee", cat: "Discipline" },
+      { text: "Don't count the days, make the days count.", author: "Muhammad Ali", cat: "Purpose" },
+      { text: "Nothing will work unless you do.", author: "Maya Angelou", cat: "Action" }
+    ];
+
+    const CATS = ['All', ...new Set(QUOTES.map(q => q.cat))];
+    let activeCat = 'All';
+    let heroIdx = Math.floor(Math.random() * QUOTES.length);
+    let favs = JSON.parse(localStorage.getItem('df_favs') || '[]');
+
+    function saveFavs() {
+      localStorage.setItem('df_favs', JSON.stringify(favs));
+    }
+
+    function filteredQuotes() {
+      return activeCat === 'All' ? QUOTES : QUOTES.filter(q => q.cat === activeCat);
+    }
+
+    function renderHero(q) {
+      const txt = document.getElementById('heroText');
+      const auth = document.getElementById('heroAuthor');
+      txt.style.opacity = '0';
+      txt.style.transform = 'translateY(10px)';
+      auth.style.opacity = '0';
+      setTimeout(() => {
+        txt.textContent = q.text;
+        auth.textContent = q.author;
+        txt.style.transition = 'opacity .4s ease, transform .4s ease';
+        txt.style.opacity = '1';
+        txt.style.transform = 'translateY(0)';
+        auth.style.transition = 'opacity .4s .1s ease';
+        auth.style.opacity = '1';
+        const isFaved = favs.includes(q.text);
+        document.getElementById('btnFavHero').textContent = isFaved ? '♥ Saved' : '♡ Save';
+      }, 180);
+    }
+
+    function renderCats() {
+      const bar = document.getElementById('catBar');
+      bar.innerHTML = '';
+      CATS.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'cat-btn' + (c === activeCat ? ' active' : '');
+        btn.textContent = c;
+        btn.addEventListener('click', () => {
+          activeCat = c;
+          renderCats();
+          renderGrid();
+        });
+        bar.appendChild(btn);
+      });
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('quotesGrid');
+      grid.innerHTML = '';
+      const list = filteredQuotes();
+      list.forEach((q, i) => {
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.style.animationDelay = (i * 0.03) + 's';
+        const isFaved = favs.includes(q.text);
+        card.innerHTML = `
+          <div>
+            <button class="q-fav ${isFaved ? 'faved' : ''}" data-text="${q.text.replace(/"/g, '&quot;')}" title="Save quote">${isFaved ? '♥' : '♡'}</button>
+            <div class="q-mark">"</div>
+            <div class="q-text">${q.text}</div>
+          </div>
+          <div class="q-footer">
+            <div class="q-author">${q.author}</div>
+            <div class="q-cat">${q.cat}</div>
+          </div>
+        `;
+        card.addEventListener('click', e => {
+          if (e.target.closest('.q-fav')) return;
+          heroIdx = QUOTES.indexOf(q);
+          renderHero(q);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        card.querySelector('.q-fav').addEventListener('click', e => {
+          e.stopPropagation();
+          const idx = favs.indexOf(q.text);
+          if (idx >= 0) favs.splice(idx, 1);
+          else favs.push(q.text);
+          saveFavs();
+          renderGrid();
+          renderHero(QUOTES[heroIdx]);
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('btnNext').addEventListener('click', () => {
+      const list = filteredQuotes();
+      heroIdx = (heroIdx + 1) % list.length;
+      renderHero(list[heroIdx]);
+    });
+
+    document.getElementById('btnFavHero').addEventListener('click', () => {
+      const q = filteredQuotes()[heroIdx % filteredQuotes().length];
+      const idx = favs.indexOf(q.text);
+      if (idx >= 0) favs.splice(idx, 1);
+      else favs.push(q.text);
+      saveFavs();
+      renderHero(q);
+      renderGrid();
+    });
+
+    // Init
+    renderHero(QUOTES[heroIdx]);
+    renderCats();
+    renderGrid();
+  </script>
+</body>
+</html>

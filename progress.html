@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progress — DayForge</title>
+  <meta name="description" content="Track your habit consistency, streak analytics, 7-day completion rings, and 30-day historical trends.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/shared.css">
+  <style>
+    .progress-container {
+      position: relative;
+      z-index: 10;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 100px 20px 140px;
+    }
+
+    .page-top {
+      animation: fadeUp 0.55s ease both;
+      margin-bottom: 28px;
+    }
+
+    .brand-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--text-heading);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-headline em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .page-tag-label {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* STAT CARDS ROW */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.55s 0.1s ease both;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 18px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold), var(--green));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      border-color: rgba(201, 168, 76, 0.3);
+      transform: translateY(-3px);
+    }
+
+    .stat-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .stat-n {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--gold);
+      transition: all 0.3s;
+    }
+
+    .stat-n.green {
+      color: var(--green);
+      text-shadow: 0 0 20px rgba(74, 222, 128, 0.25);
+    }
+
+    .stat-l {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 6px;
+    }
+
+    /* STREAK SECTION */
+    .streak-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      margin-bottom: 20px;
+      animation: fadeUp 0.55s 0.2s ease both;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+
+    .section-label {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+
+    .flame-display {
+      font-size: 3.8rem;
+      margin-bottom: 8px;
+      animation: flamePulse 2s ease-in-out infinite;
+      user-select: none;
+    }
+
+    .streak-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4.8rem;
+      font-weight: 300;
+      color: var(--amber);
+      line-height: 1;
+      text-shadow: 0 0 30px rgba(251, 191, 36, 0.35);
+    }
+
+    .streak-lbl {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 6px;
+    }
+
+    .streak-msg {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-mid);
+      margin-top: 14px;
+    }
+
+    /* WEEK VIEW */
+    .week-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+      animation: fadeUp 0.55s 0.25s ease both;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .day-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+
+    .day-cell.today {
+      background: rgba(201, 168, 76, 0.05);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+    }
+
+    .day-name {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .day-ring-wrap {
+      position: relative;
+      width: 50px;
+      height: 50px;
+    }
+
+    .day-ring-svg {
+      width: 50px;
+      height: 50px;
+      transform: rotate(-90deg);
+    }
+
+    .day-rt {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.05);
+      stroke-width: 4;
+    }
+
+    .day-rf {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 113;
+      stroke-dashoffset: 113;
+      transition: stroke-dashoffset 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), stroke 0.4s ease;
+    }
+
+    .day-num {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-mid);
+      line-height: 1;
+    }
+
+    .day-date {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+    }
+
+    .day-cell.today .day-name { color: var(--gold); }
+    .day-cell.today .day-num  { color: var(--gold); }
+
+    /* HISTORY LIST */
+    .history-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 20px;
+      animation: fadeUp 0.55s 0.3s ease both;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+
+    .history-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(to right, rgba(201, 168, 76, 0.04), transparent);
+    }
+
+    .history-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    .history-row:last-child {
+      border-bottom: none;
+    }
+
+    .history-row:hover {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    .h-date {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-mid);
+      width: 90px;
+      flex-shrink: 0;
+    }
+
+    .h-bar-track {
+      flex: 1;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .h-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .h-pct {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.72rem;
+      min-width: 40px;
+      text-align: right;
+      flex-shrink: 0;
+      font-weight: 600;
+    }
+
+    .h-verdict {
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    /* BEST HABITS */
+    .habits-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 20px;
+      animation: fadeUp 0.55s 0.35s ease both;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+
+    .habit-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    .habit-row:last-child {
+      border-bottom: none;
+    }
+
+    .habit-row:hover {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    .habit-medal {
+      font-size: 1.1rem;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .habit-emoji {
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+
+    .habit-name {
+      flex: 1;
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .habit-rate {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .empty-state {
+      padding: 48px 24px;
+      text-align: center;
+      color: var(--text-dim);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="amb amb-1"></div>
+  <div class="amb amb-2"></div>
+
+  <!-- ── SITE HEADER ── -->
+  <header class="site-header scrolled">
+    <div class="nav-container">
+      <a href="/" class="brand-link" aria-label="DayForge Home">
+        <div class="brand-logo-icon">⚒</div>
+        <span class="brand-title">Day<em>Forge</em></span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/forge" class="nav-link">Forge</a></li>
+          <li><a href="/sparks" class="nav-link">Sparks</a></li>
+          <li><a href="/progress" class="nav-link active">Progress</a></li>
+          <li><a href="https://github.com/vaibhavrsharma01-cell" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub ↗</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="/forge" class="btn-primary" style="padding:7px 16px;font-size:0.7rem;">
+          <span>Open Forge →</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="progress-container">
+    <div class="page-top">
+      <div class="brand-headline">Discipline <em>Analytics</em></div>
+      <div class="page-tag-label">◈ Performance, Trends &amp; Streaks</div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-n" id="sDays">0</div>
+        <div class="stat-l">Days Logged</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n" id="sTotal">0</div>
+        <div class="stat-l">Habits Done</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n green" id="sStreak">0</div>
+        <div class="stat-l">Day Streak 🔥</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n" id="sAvg">0%</div>
+        <div class="stat-l">Avg Score</div>
+      </div>
+    </div>
+
+    <!-- STREAK SECTION -->
+    <div class="streak-section">
+      <div class="section-label">Current Momentum Streak</div>
+      <div class="flame-display">🔥</div>
+      <div class="streak-num" id="streakBig">0</div>
+      <div class="streak-lbl">consecutive days</div>
+      <div class="streak-msg" id="streakMsg">Start logging daily habits to forge your streak.</div>
+    </div>
+
+    <!-- WEEK VIEW -->
+    <div class="week-section">
+      <div class="section-label">This Week's Completion Rings</div>
+      <div class="week-grid" id="weekGrid"></div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="history-section">
+      <div class="history-header">
+        <div class="section-label">30-Day Historical Log</div>
+      </div>
+      <div id="historyList"></div>
+    </div>
+
+    <!-- BEST HABITS -->
+    <div class="habits-section">
+      <div style="padding:18px 22px;border-bottom:1px solid var(--border);background:linear-gradient(to right,rgba(201,168,76,.03),transparent)">
+        <div class="section-label">Highest Consistency Habits</div>
+      </div>
+      <div id="bestHabits"></div>
+    </div>
+  </main>
+
+  <!-- ── FLOATING BOTTOM APP NAVIGATION ── -->
+  <nav class="app-bottom-nav" aria-label="Quick App Navigation">
+    <a class="nav-item" href="/"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></a>
+    <a class="nav-item" href="/forge"><div class="nav-icon">⚒</div><div class="nav-label">Forge</div></a>
+    <a class="nav-item" href="/sparks"><div class="nav-icon">✦</div><div class="nav-label">Sparks</div></a>
+    <a class="nav-item active" href="/progress"><div class="nav-icon">◈</div><div class="nav-label">Progress</div></a>
+  </nav>
+
+  <script>
+    function getKey(d) { return 'df_' + d.toISOString().split('T')[0]; }
+    function getDateStr(d) {
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function loadDay(d) {
+      try {
+        const s = localStorage.getItem(getKey(d));
+        if (!s) return null;
+        return JSON.parse(s);
+      } catch(e) { return null; }
+    }
+
+    function dayScore(data) {
+      if (!data) return null;
+      const t = data.tasks || [];
+      const total = t.length, done = t.filter(x => x.done).length;
+      return total > 0 ? Math.round((done / total) * 100) : null;
+    }
+
+    function scoreColor(pct) {
+      if (pct === null || pct === undefined) return 'rgba(255,255,255,0.05)';
+      if (pct >= 100) return '#4ade80';
+      if (pct >= 75)  return '#c9a84c';
+      if (pct >= 50)  return '#e8c97a';
+      if (pct >= 25)  return '#fbbf24';
+      return '#f87171';
+    }
+
+    function scoreVerdict(pct) {
+      if (pct === null) return '';
+      if (pct >= 100) return '✦';
+      if (pct >= 75)  return '◈';
+      if (pct >= 50)  return '◌';
+      return '·';
+    }
+
+    function buildStats() {
+      let days = 0, totalDone = 0, totalScores = 0, streakCount = 0;
+      const today = new Date();
+
+      for (let i = 0; i < 365; i++) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+        const data = loadDay(d);
+        const pct = dayScore(data);
+        if (pct !== null) {
+          days++;
+          totalDone += (data.tasks || []).filter(t => t.done).length;
+          totalScores += pct;
+          if (i === streakCount && pct >= 50) streakCount++;
+        } else if (i === streakCount && i > 0) {
+          /* streak broken */
+        }
+      }
+      const streak = streakCount;
+      const avg = days > 0 ? Math.round(totalScores / days) : 0;
+
+      animNum('sDays', days);
+      animNum('sTotal', totalDone);
+      animNum('sStreak', streak);
+      document.getElementById('sAvg').textContent = avg + '%';
+      document.getElementById('streakBig').textContent = streak;
+
+      const msgs = [
+        'Start logging to build your streak.',
+        'Day 1 complete — keep the flame burning!',
+        'Two days strong — build the rhythm!',
+        'Three days! You are forging real consistency.',
+        'One full week! Incredible personal discipline.',
+        'Two weeks of unbroken consistency — unstoppable.',
+        'A full month streak — you are truly forged.'
+      ];
+      const msgIdx = streak === 0 ? 0 : streak === 1 ? 1 : streak === 2 ? 2 : streak === 3 ? 3 : streak >= 7 && streak < 14 ? 4 : streak >= 14 && streak < 30 ? 5 : 6;
+      document.getElementById('streakMsg').textContent = msgs[Math.min(msgIdx, msgs.length - 1)];
+    }
+
+    function buildWeek() {
+      const grid = document.getElementById('weekGrid');
+      grid.innerHTML = '';
+      const today = new Date();
+      const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+        const data = loadDay(d);
+        const pct = dayScore(data);
+        const isToday = i === 0;
+        const cell = document.createElement('div');
+        cell.className = 'day-cell' + (isToday ? ' today' : '');
+        const circ = 113;
+        const offset = pct !== null ? circ - (pct / 100) * circ : circ;
+        const stroke = scoreColor(pct);
+        cell.innerHTML = `
+          <div class="day-name">${DAYS[d.getDay()]}</div>
+          <div class="day-ring-wrap">
+            <svg class="day-ring-svg" viewBox="0 0 48 48">
+              <circle class="day-rt" cx="24" cy="24" r="18"/>
+              <circle class="day-rf" cx="24" cy="24" r="18" style="stroke:${stroke};stroke-dashoffset:${offset}"/>
+            </svg>
+            <div class="day-num">${pct !== null ? pct + '%' : '—'}</div>
+          </div>
+          <div class="day-date">${d.getDate()}</div>
+        `;
+        grid.appendChild(cell);
+      }
+    }
+
+    function buildHistory() {
+      const list = document.getElementById('historyList');
+      list.innerHTML = '';
+      const today = new Date();
+      let found = 0;
+      for (let i = 0; i < 30; i++) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+        const data = loadDay(d);
+        const pct = dayScore(data);
+        if (pct === null) continue;
+        found++;
+        const row = document.createElement('div');
+        row.className = 'history-row';
+        const color = scoreColor(pct);
+        row.innerHTML = `
+          <div class="h-date">${getDateStr(d)}</div>
+          <div class="h-bar-track"><div class="h-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+          <div class="h-pct" style="color:${color}">${pct}%</div>
+          <div class="h-verdict">${scoreVerdict(pct)}</div>
+        `;
+        list.appendChild(row);
+      }
+      if (!found) list.innerHTML = '<div class="empty-state">No habit logs found yet. Start logging your rituals on the Forge page to see your history timeline.</div>';
+    }
+
+    function buildBestHabits() {
+      const habitMap = {};
+      const today = new Date();
+      for (let i = 0; i < 30; i++) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+        const data = loadDay(d);
+        if (!data) continue;
+        (data.tasks || []).forEach(t => {
+          const k = t.emoji + '|' + t.text;
+          if (!habitMap[k]) habitMap[k] = { emoji: t.emoji, text: t.text, done: 0, total: 0 };
+          habitMap[k].total++;
+          if (t.done) habitMap[k].done++;
+        });
+      }
+      const sorted = Object.values(habitMap).sort((a, b) => (b.done / b.total) - (a.done / a.total)).slice(0, 8);
+      const el = document.getElementById('bestHabits');
+      el.innerHTML = '';
+      if (!sorted.length) {
+        el.innerHTML = '<div class="empty-state">No habit statistics available yet. Complete your first set of habits on the Forge page!</div>';
+        return;
+      }
+      const medals = ['🥇', '🥈', '🥉'];
+      sorted.forEach((h, i) => {
+        const rate = Math.round((h.done / h.total) * 100);
+        const row = document.createElement('div');
+        row.className = 'habit-row';
+        row.innerHTML = `
+          <div class="habit-medal">${medals[i] || '•'}</div>
+          <div class="habit-emoji">${h.emoji}</div>
+          <div class="habit-name">${h.text || 'Unnamed'}</div>
+          <div class="habit-rate">${rate}%</div>
+        `;
+        el.appendChild(row);
+      });
+    }
+
+    function animNum(id, target) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (target === 0) { el.textContent = '0'; return; }
+      let cur = 0;
+      const step = Math.max(1, Math.ceil(target / 24));
+      const t = setInterval(() => {
+        cur = Math.min(cur + step, target);
+        el.textContent = cur;
+        if (cur >= target) clearInterval(t);
+      }, 50);
+    }
+
+    buildStats();
+    buildWeek();
+    buildHistory();
+    buildBestHabits();
+  </script>
+</body>
+</html>
